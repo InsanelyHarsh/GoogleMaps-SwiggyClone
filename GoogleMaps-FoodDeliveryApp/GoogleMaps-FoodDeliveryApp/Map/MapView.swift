@@ -10,11 +10,13 @@ import CoreLocation
 
 struct MapView: View {
     @Binding var coordinates:CLLocationCoordinate2D
+    @Binding var isConfirm:Bool
     
-    
+    @Environment(\.dismiss) private var dismiss
+
     @StateObject var vm = MapViewModel()
     
-    
+    @EnvironmentObject var locationManager:LocationManager
     var body: some View {
         
         ZStack(alignment: .bottom){
@@ -25,9 +27,42 @@ struct MapView: View {
                 }
             
             
-            VStack(alignment: .leading){
-                Text("Coordinates: \(coordinates.longitude), \(coordinates.latitude)")
-                Text("Country: \(vm.placeName)")
+            VStack{
+                VStack(alignment: .leading){
+//                    Text("Coordinates: \(coordinates.longitude), \(coordinates.latitude)")
+//                    Text("Address: \(vm.placeName)")
+                    Text(vm.placeName)
+                        .multilineTextAlignment(.leading)
+                        .lineLimit(2)
+                        .padding(.horizontal,3)
+                }
+                
+                HStack{
+                    Button {
+                        coordinates = CLLocationCoordinate2D(latitude: locationManager.latitude, longitude: locationManager.longitude)
+                    } label: {
+                        Text("Current Location")
+                            .padding()
+                            .foregroundColor(.white)
+                            .background{
+                                Color.orange.cornerRadius(5)
+                            }
+                    }
+                    
+                    
+                    Button {
+                        dismiss()
+                        isConfirm = true
+                    } label: {
+                        Text("Confirm Location")
+                            .padding()
+                            .foregroundColor(.white)
+                            .background{
+                                Color.black.cornerRadius(5)
+                            }
+                    }
+                }
+
             }
             .foregroundColor(.white)
             .padding(.bottom,13)
@@ -35,7 +70,7 @@ struct MapView: View {
                 Rectangle()
                     .foregroundColor(.teal).opacity(0.9)
                     .cornerRadius(10)
-                    .frame(width: UIScreen.main.bounds.width*(0.98), height: 130, alignment: .center)
+                    .frame(width: UIScreen.main.bounds.width*(0.98), height: 170, alignment: .center)
             }
         }
         .onChange(of: coordinates, perform: { newValue in

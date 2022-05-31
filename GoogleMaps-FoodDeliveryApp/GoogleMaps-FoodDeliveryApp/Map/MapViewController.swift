@@ -25,7 +25,7 @@ struct GoogleMapsView: UIViewRepresentable {
     
     func makeUIView(context: Self.Context) -> GMSMapView {
         
-        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude, longitude: coordinate.longitude, zoom: 3)
+        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude, longitude: coordinate.longitude, zoom: 4)
         
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapView.mapType = .normal
@@ -42,7 +42,7 @@ struct GoogleMapsView: UIViewRepresentable {
         //UPDATING UIKIT FROM CHANGING SWIFTUI
     func updateUIView(_ mapView: GMSMapView, context: Context) {
         
-        let upd = GMSCameraUpdate.setTarget(coordinate)
+        let upd = GMSCameraUpdate.setCamera(GMSCameraPosition(target: coordinate, zoom: 15))
         mapView.animate(with: upd)
     }
     

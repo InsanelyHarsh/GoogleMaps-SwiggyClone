@@ -1,19 +1,47 @@
-    //
-    //  LocationManager.swift
-    //  Dummy
-    //
-    //  Created by Harsh Yadav on 26/05/22.
-    //
+//
+//  LocationManager.swift
+//  Dummy
+//
+//  Created by Harsh Yadav on 26/05/22.
+//
 
 import Combine
 import CoreLocation
+import GoogleMaps
 
+enum LocationStatus{
+    case auth
+    case notAuth
+    case denied
+    case unknown
+}
 
-class HomeViewModel:ObservableObject{
-    @Published var locationStatus:String = ""
-    @Published var location:CLLocation?{
-        willSet{
-            objectWillChange.send()
+enum AccuracyStatus{
+    case full
+    case reduced
+    case unknown
+}
+
+class LocationManager:NSObject,ObservableObject{
+
+    let manager = CLLocationManager()
+    let geoManager:GeoCodingManager = GeoCodingManager(gms: GMSGeocoder())
+    
+    @Published var locationDescription = "...."
+    @Published var accuracyStatus:AccuracyStatus = .unknown
+    @Published var locationStatus:LocationStatus = .unknown
+    @Published var userLocation:String = "<<->>"
+    @Published var location: CLLocation? {
+        willSet { objectWillChange.send() }
+        didSet{
+            Task{
+                do{
+                    try await self.fetchUserLocation()
+                }
+                catch{
+                    print("Errrrrr.")
+                }
+            }
         }
     }
     
@@ -25,248 +53,155 @@ class HomeViewModel:ObservableObject{
         return location?.coordinate.longitude ?? 0
     }
     
-    let locationManager:LocationManager
-    init(locationManager:LocationManager){
-        self.locationManager = locationManager
-    }
-    
-    func getLatestLocation(){
-        
-    }
-}
 
-
-class LocationManager: NSObject, ObservableObject {
-    private let locationManager = CLLocationManager()
-    
-    @Published var locationStatus = "..."
-        // 1
-    @Published var location: CLLocation? {
-        willSet { objectWillChange.send() }
-    }
-    
-        // 2
-    var latitude: CLLocationDegrees {
-        return location?.coordinate.latitude ?? 0
-    }
-    
-    var longitude: CLLocationDegrees {
-        return location?.coordinate.longitude ?? 0
-    }
-    
-        // 3
     override init() {
         super.init()
-        
         setup()
+        updateAuthStatus()
+        updateAccuracyStatus()
     }
     
     private func setup(){
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
+        manager.delegate = self
         
-        locationManager.startUpdatingLocation()
+        manager.desiredAccuracy = kCLLocationAccuracyBest
+        manager.requestWhenInUseAuthorization()
+        
+        //after requesting auth call delegate didUpdateLocations
+        
+//        manager.startUpdatingLocation()
     }
     
-    
-    func checkLocationAccuracyAllowed() {
-        locationManager.startUpdatingLocation()
-        
-        switch locationManager.accuracyAuthorization {
-        case .reducedAccuracy:
-            locationStatus = "approximate location"
-        case .fullAccuracy:
-            locationStatus = "accurate location"
-        @unknown default:
-            locationStatus = "unknown type"
-        }
-        
-    }
-    
-    func authStatus(){
-        switch locationManager.authorizationStatus{
-        case .authorizedAlways:
-            locationStatus = "authorized always"
-            checkLocationAccuracyAllowed()
-        case .authorizedWhenInUse:
-            locationStatus = "authorized when in use"
-            checkLocationAccuracyAllowed()
+    private func updateAuthStatus(){
+        switch manager.authorizationStatus{
         case .notDetermined:
-            locationStatus = "not determined"
+            self.locationDescription = "Not Determined"
+            self.locationStatus = .notAuth
+            
         case .restricted:
-            locationStatus = "restricted"
+            self.locationDescription = "Restricted"
+            self.locationStatus = .denied
+            
         case .denied:
-            locationStatus = "denied"
-        default:
-            locationStatus = "other"
+            self.locationDescription = "Denied"
+            self.locationStatus = .denied
+            
+        case .authorizedAlways:
+            self.locationDescription = "Authorized Always"
+            self.locationStatus = .auth
+            updateAccuracyStatus()
+            
+        case .authorizedWhenInUse:
+            self.locationDescription = "Authorized When In Use"
+            self.locationStatus = .auth
+            updateAccuracyStatus()
+            
+        @unknown default:
+            self.locationDescription = "Unknown Status"
+            self.locationStatus = .unknown
         }
     }
     
-    func requestLocationAuth() {
-        
-        locationManager.requestAlwaysAuthorization()
-        locationManager.desiredAccuracy = kCLLocationAccuracyReduced
-        
-        authStatus()
+    private func updateAccuracyStatus(){
+        manager.startUpdatingLocation()
+        switch manager.accuracyAuthorization{
+        case .fullAccuracy:
+            self.locationDescription = "Accurate Location"
+            self.accuracyStatus = .full
+            self.locationStatus = .auth
+            
+        case .reducedAccuracy:
+            self.locationDescription = "Approximate Location"
+            self.locationStatus = .auth
+            self.accuracyStatus = .reduced
+            
+        @unknown default:
+            self.locationDescription = "Unknown Accuracy Status"
+            self.accuracyStatus = .unknown
+        }
     }
     
-    func updateLocation(){
-        locationManager.requestLocation()
-        locationManager.startUpdatingLocation()
+    func updateLocation(){//TODO: improve... Refactor startUpdatingLocation()
+        manager.requestLocation()
+        manager.startUpdatingLocation()
+    }
+    
+
+    func fetchUserLocation() async throws{
+        let result = try await geoManager.getPlaceName(of: CLLocationCoordinate2D(latitude: self.latitude, longitude: self.longitude))
+        guard let result = result else {
+            //TODO: improve...
+            DispatchQueue.main.async {
+                self.userLocation =  "Can't Find Place. :("
+            }
+            return
+        }
+        //TODO: improve......
+        DispatchQueue.main.async {
+            self.userLocation = result
+        }
     }
 }
 
 
 
-extension LocationManager: CLLocationManagerDelegate {
 
-    
+extension LocationManager:CLLocationManagerDelegate{
+    //DID UPDATE/CHANGE location
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("Started Updating Location")
         guard let location = locations.last else { return }
         self.location = location
-        print(">>>>> \(location.coordinate.latitude),\(location.coordinate.longitude)")
-        authStatus()
-        print("Updated Location")
+        self.updateAuthStatus()
+        self.updateAccuracyStatus()
         manager.stopUpdatingLocation()
-        print("Stoped updating Location.")
     }
-    
-    
-    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("And Error Occured wile Updating Loacations.")
+        self.locationDescription = "An Error Occured While Updating User Location" //TODO: improve..
+        
+        print(">> An Error Occured While Updating User Location. \n")
+        print(">> Error: \(error.localizedDescription) \n \n")
+        
     }
     
-    
-    
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+    //DID CHANGE AUTH status
+    /// whenever auth is changed:
+    ///-> Update Location Status
+    ///-> Update Location of User
+     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        
+         
         let status = manager.authorizationStatus
         let accuracyStatus = manager.accuracyAuthorization
-        
-        if (status == .authorizedAlways || status == .authorizedWhenInUse){
-            if (accuracyStatus == CLAccuracyAuthorization.reducedAccuracy){
-                locationManager.requestTemporaryFullAccuracyAuthorization(withPurposeKey: "wantAccurateLocation", completion: { [self]
-                    error in
+            
+         self.updateAuthStatus()
+         self.updateAccuracyStatus()
+         
+        if((status == .authorizedWhenInUse) || (status == .authorizedAlways)){
+            if (accuracyStatus == .reducedAccuracy){
+                //TODO: improve this do..
+//                do{
                     
-                    if locationManager.accuracyAuthorization == .fullAccuracy{
-                        locationStatus = "Full Accuracy Location Access Granted Temporarily"
+//                    try await manager.requestTemporaryFullAccuracyAuthorization(withPurposeKey: "wantAccurateLocation")
+                    
+                    if (accuracyStatus == .fullAccuracy){
+                        self.locationDescription = "Full Accuracy Location Access Granted."
                     }
-                    else{
-                        locationStatus = "Approx Location As User Denied Accurate Location Access"
+                    else if (accuracyStatus == .reducedAccuracy){
+                        self.locationDescription = "Approx Location As User Denied Accurate Location Access"
+                        
                     }
-                    locationManager.startUpdatingLocation()
-                })
+                    
+                    manager.startUpdatingLocation()
+//                }
+//                catch{
+//                    locationDescription = "An Error Occured While Requesting Temporaray Full Accuracy Auth"
+//                }
             }
-        }
-        else{
-            requestLocationAuth()
-        }
-    }
-    
-
-}
-
-class Location:NSObject{
-    @Published var authorizationStatus:String = "Not Determined"
-    let manager = CLLocationManager()
-    
-    override init() {
-        super.init()
-        print("Location Class in inited")
-    }
-    
-    func setup(){
-//        manager.delegate = self
-//        manager.requestLocation()
-        
-        manager.requestAlwaysAuthorization()
-        manager.requestWhenInUseAuthorization()
-//        manager.requestLocation()
-        
-        switch manager.authorizationStatus{
-            case .notDetermined:
-                self.authorizationStatus = "Not Determined"
-                print("Not Determined")
-            case .restricted:
-                self.authorizationStatus = "Restricted"
-                print("Restricted")
-            case .denied:
-                self.authorizationStatus = "Denied"
-                print("Denied")
-            case .authorizedAlways:
-                self.authorizationStatus = "Authorized Always"
-                print("Authorized Always")
-            case .authorizedWhenInUse:
-                self.authorizationStatus = "Authorized When In Use"
-                print("Authorized When In Use")
-            @unknown default:
-                self.authorizationStatus = "Unknown"
-                print("Unknown")
-        }
-        if CLLocationManager.locationServicesEnabled(){
-            manager.delegate = self
-            manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            manager.startUpdatingLocation()
-            manager.startUpdatingLocation()
-        }
-        else{
-            print("Please Provde Location Permission")
-            manager.requestAlwaysAuthorization()
-            manager.requestWhenInUseAuthorization()
-        }
-//        guard CLLocationManager.locationServicesEnabled() else{
-//            manager.requestLocation()
-//            print("Please Provide Location Perminssion")
-//            return
-//        }
-        
-        
-    }
-    
-    
-    func extras(){
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-    }
-}
-
-extension Location:CLLocationManagerDelegate {
-        // 4
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-            print("locations = \(locValue.latitude) \(locValue.longitude)")
-        
-//        if let location = locations.first{
-//            manager.stopUpdatingLocation()
-//            print(location.coordinate)
-//        }
-//        guard let location = locations.last else { return }
-//        self.location = location
-    }
-    
-    func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        print("Changed Auth Status")
-        switch manager.authorizationStatus{
-        case .notDetermined:
-            self.authorizationStatus = "Not Determined"
-            print("Not Determined")
-        case .restricted:
-            self.authorizationStatus = "Restricted"
-            print("Restricted")
-        case .denied:
-            self.authorizationStatus = "Denied"
-            print("Denied")
-        case .authorizedAlways:
-            self.authorizationStatus = "Authorized Always"
-            print("Authorized Always")
-        case .authorizedWhenInUse:
-            self.authorizationStatus = "Authorized When In Use"
-            print("Authorized When In Use")
-        @unknown default:
-            self.authorizationStatus = "Unknown"
-            print("Unknown")
+            else if(accuracyStatus == .fullAccuracy){
+                
+                self.locationDescription = "Accurate Location"
+                manager.startUpdatingLocation()
+            }
         }
     }
 }

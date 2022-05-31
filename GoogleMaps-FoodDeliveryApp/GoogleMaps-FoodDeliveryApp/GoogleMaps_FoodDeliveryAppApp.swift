@@ -13,18 +13,24 @@ let APIKey = "AIzaSyAhR0HtGDcfzzU4aDLnAcncebqVZBt6oCs"
 
 @main
 struct GoogleMaps_FoodDeliveryAppApp: App {
+    
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject var locationManager:LocationManager = LocationManager()
+    
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(locationManager)
         }
     }
 }
 
-class AppDelegate: NSObject, UIApplicationDelegate    {
-     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-         GMSServices.provideAPIKey(APIKey)
-         GMSPlacesClient.provideAPIKey(APIKey)
-         return true
-     }
- }
+class AppDelegate: NSObject, UIApplicationDelegate{
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        GMSServices.provideAPIKey(APIKey)
+        GMSPlacesClient.provideAPIKey(APIKey)
+        
+        return true
+    }
+}

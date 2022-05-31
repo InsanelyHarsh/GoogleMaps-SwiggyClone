@@ -7,9 +7,9 @@
 
 import Foundation
 import CoreLocation
-
+import GoogleMaps
 class MapViewModel:ObservableObject{
-    let mapManager = MapManager()
+    let mapManager = GoogleMapManager(gms: GMSGeocoder())
     @Published var placeName:String = ""
     init(){
         
