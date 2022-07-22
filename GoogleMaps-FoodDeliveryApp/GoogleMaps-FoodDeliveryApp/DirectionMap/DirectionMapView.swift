@@ -7,7 +7,7 @@
 
 import SwiftUI
 import CoreLocation
-
+import Combine
 struct DirectionMapView: View {
 //    @Binding var pickupCoordintes:CLLocationCoordinate2D?
 //    @Binding var dropCoordintes:CLLocationCoordinate2D?
@@ -44,8 +44,7 @@ struct DirectionMapView: View {
                     Text("Arrival Time: \(directionMapVM.mapDirectionModel?.routes?[0].legs?[0].arrivalTime?.text ?? "-")")
                     
                     Text("Departure Time: \(directionMapVM.mapDirectionModel?.routes?[0].legs?[0].departureTime?.text ?? "-")")
-                    
-                    Text("Selected Current Location : \((stateHandler.didSelectCurrentPickLocation || stateHandler.didSelectionCurrentDropLocation) ? "Yes" : "No")")
+
                 }
                 .padding(.leading)
                 .foregroundColor(.white)
@@ -57,12 +56,21 @@ struct DirectionMapView: View {
             .cornerRadius(10)
         }
         .task {
+            self.stateHandler.makeApiCall = {
+                await directionMapVM.getDirections(source: stateHandler.userPickupLocation!, destination: stateHandler.userDropLocation!)
+            }
+            
+        }
+        .onDisappear(perform: {
+            self.stateHandler.cancellables = Set<AnyCancellable>()
+        })
+        .task {
             Task{
                 await directionMapVM.getDirections(source: stateHandler.userPickupLocation!, destination: stateHandler.userDropLocation!)
-                let z = self.directionMapVM.getpolylines(data: self.directionMapVM.mapDirectionModel)
-                for i in z{
-//                    i.map = mapView
-                }
+//                let z = self.directionMapVM.getpolylines(data: self.directionMapVM.mapDirectionModel)
+//                for i in z{
+////                    i.map = mapView
+//                }
             }
         }
     }

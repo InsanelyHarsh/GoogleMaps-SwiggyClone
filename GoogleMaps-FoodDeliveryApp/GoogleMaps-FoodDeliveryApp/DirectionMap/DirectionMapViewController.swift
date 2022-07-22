@@ -20,38 +20,26 @@ class previousState:ObservableObject{
 //MARK: UIKIT
 struct DirectionMapViewController: UIViewRepresentable {
     private let zoom: Float = 20
-
-//    @Binding var dropLocation:CLLocationCoordinate2D?
-//    @Binding var pickupLocation:CLLocationCoordinate2D?
     
     @EnvironmentObject var directionMapVM:DirectionMapViewModel
     @EnvironmentObject var stateHandler:StateHandler
     @StateObject var directionLocationManager:DirectionLocationManager = DirectionLocationManager()
     
-//    var curState:(()->GMSCameraPosition)
-
     var mapView:GMSMapView!
     
-//    @Binding var cameraPosition:GMSCameraPosition
     
     func makeUIView(context: Self.Context) -> GMSMapView {
         
+        self.stateHandler.makeCamera()
+        let camera = self.stateHandler.currentState!
         
-//        let camera = GMSCameraPosition.camera(withLatitude: pickupLocation!.latitude, longitude: pickupLocation!.longitude, zoom: 15)
-        let camera = GMSCameraPosition.camera(withLatitude: stateHandler.userPickupLocation!.latitude, longitude: stateHandler.userPickupLocation!.longitude, zoom: 15)
-        
-//        let camera = self.stateHandler.currentState
-//        self.currentState(camera)
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapView.mapType = .normal
         
-//        layout(mapView:mapView) //custom marker
         
-//        mapView.delegate = context.coordinator
+        mapView.delegate = context.coordinator
         
-        mapView.isMyLocationEnabled = true
-//        directionLocationManager.startUpdating()
-        
+        mapView.isMyLocationEnabled = true        
         drawNavigationPath(mapView: mapView)
 
         
@@ -96,35 +84,23 @@ struct DirectionMapViewController: UIViewRepresentable {
     
     //UIKIT ---> SWIFTUI
     //UPDATING SWIFTUI FROM CHANGING UIKIT
-//    func makeCoordinator() -> Coordinator {
-//        return Coordinator()
-//    }
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(state: $stateHandler.updatedState)
+    }
     
-//    class Coordinator:NSObject,GMSMapViewDelegate{
-//        var position:GMSCameraPosition?{
-//            didSet{
-//                print("Position Changed")
-//            }
-//        }
-//
-//
-//        func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
-//
-//            print("MapView didChangeCameraPosition " + "\(position.target.longitude),\(position.target.latitude) " + "zoom: \(position.zoom) bearing: \(position.bearing)")
-//
-//
+    class Coordinator:NSObject,GMSMapViewDelegate{
+        @Binding var state:GMSCameraPosition?
+        init(state:Binding<GMSCameraPosition?>){
+            self._state = state
+        }
+
+
+        func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+
+            print("MapView didChangeCameraPosition " + "\(position.target.longitude),\(position.target.latitude) " + "zoom: \(position.zoom) bearing: \(position.bearing)")
 //            self.position = position
-//        }
-//
-////        func mapViewDidFinishTileRendering(_ mapView: GMSMapView) {
-////
-////            guard let position = position else {
-////                return
-////            }
-////
-////            mapView.animate(toLocation: position.target)
-//////            self.centerCoodinates = position.target
-////                //            self.cameraPosition!(position)
-////        }
-//    }
+            self.state = position
+            
+        }
+    }
 }

@@ -21,33 +21,59 @@ class StateHandler:ObservableObject{
     @Published var updatedPickupLocation:CLLocationCoordinate2D?
     @Published var updatedDropLocation:CLLocationCoordinate2D?
     
-    @Published var updatedState:GMSCameraPosition? //prev rakh rhe hai isme...
-    @Published var currentState:GMSCameraPosition? //ye show ho rhi hai user ko......
+    @Published var updatedState:GMSCameraPosition! //prev rakh rhe hai isme...
+    @Published var currentState:GMSCameraPosition! //ye show ho rhi hai user ko......
     
     var direction:DirectionLocationManager = DirectionLocationManager()
     var cancellables:Set<AnyCancellable> = Set<AnyCancellable>()
     
+    var makeApiCall:(() async ->Void)?
     init(){
-//        logic()
-
-//        self.currentState = GMSCameraPosition.camera(withLatitude: self.userPickupLocation!.latitude, longitude: self.userPickupLocation!.longitude, zoom: 15)
-//
-//        self.updatedState = currentState
+        logic()
     }
     
-    
+    deinit{
+        cancellables = Set<AnyCancellable>()
+    }
     func logic(){
         direction.$location.sink { [self] newLocation in
             if(didSelectionCurrentDropLocation){
                 self.updatedDropLocation = newLocation?.coordinate
-                
-                self.currentState = updatedState
+                if let x = makeApiCall{
+                    Task{
+                        await x()
+                    }
+                }
+                self.retrievePrevState()
+                print(">>>>>>>>>>>")
+                //Call API
                 
             }else if(didSelectCurrentPickLocation){
                 self.updatedPickupLocation = newLocation?.coordinate
-                self.currentState = updatedState
+                
+                if let x = makeApiCall{
+                    Task{
+                        await x()
+                    }
+                }
+                
+                self.retrievePrevState()
+                print("<<<<<<<<<<<")
+                //Call API
             }
         }
         .store(in: &cancellables)
     }
+    
+    func makeCamera(){
+        self.currentState = GMSCameraPosition.camera(withLatitude: self.userPickupLocation!.latitude, longitude: self.userPickupLocation!.longitude, zoom: 15)
+        
+        self.updatedState = currentState
+    }
+    
+    func retrievePrevState(){
+        self.currentState = updatedState
+    }
+    
+    
 }
