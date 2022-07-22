@@ -10,7 +10,7 @@ import CoreLocation
 import GoogleMaps
 struct SearchView: View {
 
-    @StateObject var vm = SearchViewModel(manager: GoogleMapManager(gms: GMSGeocoder()),locationManager: LocationManager())
+    @StateObject var vm = SearchViewModel(manager: SearchManager(), locationManager: LocationManager())
     @State var isPressed:Bool = false
     @State var isConfirm:Bool = false
     @Environment(\.dismiss) private var dismiss

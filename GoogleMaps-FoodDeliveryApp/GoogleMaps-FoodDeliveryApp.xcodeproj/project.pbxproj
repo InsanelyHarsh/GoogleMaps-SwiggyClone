@@ -8,9 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		98A74A0BBFD63A57BE88993C /* Pods_GoogleMaps_FoodDeliveryApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2F34BABA08BFB824349170C /* Pods_GoogleMaps_FoodDeliveryApp.framework */; };
+		B036C40C288520660034A7EA /* Statics.swift in Sources */ = {isa = PBXBuildFile; fileRef = B036C40B288520660034A7EA /* Statics.swift */; };
+		B036C40E288523600034A7EA /* NetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B036C40D288523600034A7EA /* NetworkingManager.swift */; };
+		B036C410288526330034A7EA /* DirectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B036C40F288526330034A7EA /* DirectionManager.swift */; };
+		B036C412288528770034A7EA /* MapDirectionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B036C411288528770034A7EA /* MapDirectionModel.swift */; };
+		B036C414288528D60034A7EA /* MapDirectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B036C413288528D60034A7EA /* MapDirectionViewModel.swift */; };
+		B036C41628852F0C0034A7EA /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B036C41528852F0C0034A7EA /* SearchManager.swift */; };
+		B036C419288546E70034A7EA /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B036C418288546E70034A7EA /* DirectionsView.swift */; };
 		B04F4CD8284098BB00648E76 /* GoogleMaps_FoodDeliveryAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F4CD7284098BB00648E76 /* GoogleMaps_FoodDeliveryAppApp.swift */; };
 		B04F4CDC284098BC00648E76 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B04F4CDB284098BC00648E76 /* Assets.xcassets */; };
 		B04F4CDF284098BC00648E76 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B04F4CDE284098BC00648E76 /* Preview Assets.xcassets */; };
+		B04F6A2D2887B48600B74989 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A2C2887B48600B74989 /* CustomTextField.swift */; };
+		B04F6A2F2887B87A00B74989 /* DirectionSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A2E2887B87A00B74989 /* DirectionSearchView.swift */; };
+		B04F6A322887B9E100B74989 /* DirectionSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A312887B9E100B74989 /* DirectionSearchViewModel.swift */; };
+		B04F6A352887CB7600B74989 /* DirectionMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A342887CB7600B74989 /* DirectionMapView.swift */; };
+		B04F6A372887E29900B74989 /* DirectionMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A362887E29900B74989 /* DirectionMapViewController.swift */; };
+		B04F6A392887E74400B74989 /* DirectionMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A382887E74400B74989 /* DirectionMapViewModel.swift */; };
+		B04F6A572889523200B74989 /* DirectionLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A562889523200B74989 /* DirectionLocationManager.swift */; };
+		B04F6A5B288A84AA00B74989 /* StateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A5A288A84AA00B74989 /* StateHandler.swift */; };
 		B05B5C3728447F1D005B1AB7 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B5C3628447F1D005B1AB7 /* HomeViewModel.swift */; };
 		B0D6EA32284099B2002D10CE /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D6EA31284099B2002D10CE /* HomeView.swift */; };
 		B0D6EA35284099CD002D10CE /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D6EA34284099CD002D10CE /* SearchView.swift */; };
@@ -27,11 +42,26 @@
 /* Begin PBXFileReference section */
 		7EBEF4B0503F6113D26786F0 /* Pods-GoogleMaps-FoodDeliveryApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoogleMaps-FoodDeliveryApp.debug.xcconfig"; path = "Target Support Files/Pods-GoogleMaps-FoodDeliveryApp/Pods-GoogleMaps-FoodDeliveryApp.debug.xcconfig"; sourceTree = "<group>"; };
 		A3B6C4DC70598D3B8A492B41 /* Pods-GoogleMaps-FoodDeliveryApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GoogleMaps-FoodDeliveryApp.release.xcconfig"; path = "Target Support Files/Pods-GoogleMaps-FoodDeliveryApp/Pods-GoogleMaps-FoodDeliveryApp.release.xcconfig"; sourceTree = "<group>"; };
+		B036C40B288520660034A7EA /* Statics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statics.swift; sourceTree = "<group>"; };
+		B036C40D288523600034A7EA /* NetworkingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingManager.swift; sourceTree = "<group>"; };
+		B036C40F288526330034A7EA /* DirectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionManager.swift; sourceTree = "<group>"; };
+		B036C411288528770034A7EA /* MapDirectionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDirectionModel.swift; sourceTree = "<group>"; };
+		B036C413288528D60034A7EA /* MapDirectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapDirectionViewModel.swift; sourceTree = "<group>"; };
+		B036C41528852F0C0034A7EA /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
+		B036C418288546E70034A7EA /* DirectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsView.swift; sourceTree = "<group>"; };
 		B04F4CD4284098BB00648E76 /* GoogleMaps-FoodDeliveryApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GoogleMaps-FoodDeliveryApp.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B04F4CD7284098BB00648E76 /* GoogleMaps_FoodDeliveryAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMaps_FoodDeliveryAppApp.swift; sourceTree = "<group>"; };
 		B04F4CDB284098BC00648E76 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B04F4CDE284098BC00648E76 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B04F4CE5284098DF00648E76 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B04F6A2C2887B48600B74989 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		B04F6A2E2887B87A00B74989 /* DirectionSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSearchView.swift; sourceTree = "<group>"; };
+		B04F6A312887B9E100B74989 /* DirectionSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionSearchViewModel.swift; sourceTree = "<group>"; };
+		B04F6A342887CB7600B74989 /* DirectionMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionMapView.swift; sourceTree = "<group>"; };
+		B04F6A362887E29900B74989 /* DirectionMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionMapViewController.swift; sourceTree = "<group>"; };
+		B04F6A382887E74400B74989 /* DirectionMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionMapViewModel.swift; sourceTree = "<group>"; };
+		B04F6A562889523200B74989 /* DirectionLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionLocationManager.swift; sourceTree = "<group>"; };
+		B04F6A5A288A84AA00B74989 /* StateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateHandler.swift; sourceTree = "<group>"; };
 		B05B5C3628447F1D005B1AB7 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		B0D6EA31284099B2002D10CE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B0D6EA34284099CD002D10CE /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -75,6 +105,24 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		B036C40A2885205D0034A7EA /* Statics */ = {
+			isa = PBXGroup;
+			children = (
+				B036C40B288520660034A7EA /* Statics.swift */,
+			);
+			path = Statics;
+			sourceTree = "<group>";
+		};
+		B036C41728853E6E0034A7EA /* Directions */ = {
+			isa = PBXGroup;
+			children = (
+				B036C418288546E70034A7EA /* DirectionsView.swift */,
+				B036C413288528D60034A7EA /* MapDirectionViewModel.swift */,
+				B036C411288528770034A7EA /* MapDirectionModel.swift */,
+			);
+			path = Directions;
+			sourceTree = "<group>";
+		};
 		B04F4CCB284098BB00648E76 = {
 			isa = PBXGroup;
 			children = (
@@ -96,11 +144,16 @@
 		B04F4CD6284098BB00648E76 /* GoogleMaps-FoodDeliveryApp */ = {
 			isa = PBXGroup;
 			children = (
-				B0D6EA4628409A7C002D10CE /* Manager */,
-				B0D6EA4928409A95002D10CE /* CustomCell */,
-				B0D6EA3D28409A3A002D10CE /* Map */,
-				B0D6EA33284099C7002D10CE /* Search */,
 				B0D6EA30284099AA002D10CE /* Home */,
+				B0D6EA33284099C7002D10CE /* Search */,
+				B0D6EA3D28409A3A002D10CE /* Map */,
+				B0D6EA4628409A7C002D10CE /* Manager */,
+				B036C41728853E6E0034A7EA /* Directions */,
+				B04F6A302887B9BF00B74989 /* DirectionSearch */,
+				B04F6A332887C74B00B74989 /* DirectionMap */,
+				B04F6A292887B46800B74989 /* ReusableViews */,
+				B036C40A2885205D0034A7EA /* Statics */,
+				B0D6EA4928409A95002D10CE /* CustomCell */,
 				B04F4CE5284098DF00648E76 /* Info.plist */,
 				B04F4CD7284098BB00648E76 /* GoogleMaps_FoodDeliveryAppApp.swift */,
 				B04F4CDB284098BC00648E76 /* Assets.xcassets */,
@@ -115,6 +168,35 @@
 				B04F4CDE284098BC00648E76 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B04F6A292887B46800B74989 /* ReusableViews */ = {
+			isa = PBXGroup;
+			children = (
+				B04F6A2C2887B48600B74989 /* CustomTextField.swift */,
+			);
+			path = ReusableViews;
+			sourceTree = "<group>";
+		};
+		B04F6A302887B9BF00B74989 /* DirectionSearch */ = {
+			isa = PBXGroup;
+			children = (
+				B04F6A2E2887B87A00B74989 /* DirectionSearchView.swift */,
+				B04F6A312887B9E100B74989 /* DirectionSearchViewModel.swift */,
+			);
+			path = DirectionSearch;
+			sourceTree = "<group>";
+		};
+		B04F6A332887C74B00B74989 /* DirectionMap */ = {
+			isa = PBXGroup;
+			children = (
+				B04F6A342887CB7600B74989 /* DirectionMapView.swift */,
+				B04F6A362887E29900B74989 /* DirectionMapViewController.swift */,
+				B04F6A382887E74400B74989 /* DirectionMapViewModel.swift */,
+				B04F6A562889523200B74989 /* DirectionLocationManager.swift */,
+				B04F6A5A288A84AA00B74989 /* StateHandler.swift */,
+			);
+			path = DirectionMap;
 			sourceTree = "<group>";
 		};
 		B0D6EA30284099AA002D10CE /* Home */ = {
@@ -151,6 +233,9 @@
 			children = (
 				B0D6EA4728409A87002D10CE /* LocationManager.swift */,
 				B0D6EA4028409A48002D10CE /* GoogleMapManager.swift */,
+				B036C40D288523600034A7EA /* NetworkingManager.swift */,
+				B036C40F288526330034A7EA /* DirectionManager.swift */,
+				B036C41528852F0C0034A7EA /* SearchManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -279,16 +364,31 @@
 			files = (
 				B0D6EA35284099CD002D10CE /* SearchView.swift in Sources */,
 				B0D6EA4B28409A9D002D10CE /* CustomCell.swift in Sources */,
+				B04F6A572889523200B74989 /* DirectionLocationManager.swift in Sources */,
+				B036C412288528770034A7EA /* MapDirectionModel.swift in Sources */,
+				B04F6A5B288A84AA00B74989 /* StateHandler.swift in Sources */,
+				B04F6A322887B9E100B74989 /* DirectionSearchViewModel.swift in Sources */,
+				B036C419288546E70034A7EA /* DirectionsView.swift in Sources */,
 				B0D6EA37284099E2002D10CE /* SearchViewModel.swift in Sources */,
 				B0D6EA32284099B2002D10CE /* HomeView.swift in Sources */,
 				B0D6EA4528409A5B002D10CE /* MapView.swift in Sources */,
 				B0D6EA4328409A54002D10CE /* MapViewController.swift in Sources */,
 				B0D6EA3C28409A1E002D10CE /* SearchResultModel.swift in Sources */,
+				B04F6A352887CB7600B74989 /* DirectionMapView.swift in Sources */,
 				B0D6EA4128409A48002D10CE /* GoogleMapManager.swift in Sources */,
 				B05B5C3728447F1D005B1AB7 /* HomeViewModel.swift in Sources */,
 				B0D6EA4828409A87002D10CE /* LocationManager.swift in Sources */,
 				B04F4CD8284098BB00648E76 /* GoogleMaps_FoodDeliveryAppApp.swift in Sources */,
+				B04F6A2F2887B87A00B74989 /* DirectionSearchView.swift in Sources */,
+				B04F6A2D2887B48600B74989 /* CustomTextField.swift in Sources */,
+				B036C410288526330034A7EA /* DirectionManager.swift in Sources */,
+				B036C414288528D60034A7EA /* MapDirectionViewModel.swift in Sources */,
+				B036C40C288520660034A7EA /* Statics.swift in Sources */,
+				B04F6A392887E74400B74989 /* DirectionMapViewModel.swift in Sources */,
+				B036C41628852F0C0034A7EA /* SearchManager.swift in Sources */,
+				B04F6A372887E29900B74989 /* DirectionMapViewController.swift in Sources */,
 				B0D6EA3F28409A41002D10CE /* MapViewModel.swift in Sources */,
+				B036C40E288523600034A7EA /* NetworkingManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

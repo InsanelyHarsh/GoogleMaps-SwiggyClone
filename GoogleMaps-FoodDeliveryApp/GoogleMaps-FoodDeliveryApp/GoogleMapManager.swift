@@ -7,12 +7,14 @@
 
 import GooglePlaces
 import GoogleMaps
+//import GoogleNavigation
 
 enum GooglePlacesSearchError:Error{
     case unknownError
     case noResult
     
 }
+
 
 
 protocol GeocodingProtocol{
@@ -31,76 +33,46 @@ protocol GooglePlacesProtocol{
 
 //TODO: Genrics....
 //TODO: Error Handling....
-class GoogleMapManager:GooglePlacesProtocol,GeocodingProtocol{
-    
-    static let shared = GMSPlacesClient.shared()
-    
-    let gms:GMSGeocoder
-    init(gms:GMSGeocoder){
-        self.gms = gms
-    }
-    
-    
-    ///Search Google Places from given query. This function will give array of Result.
-    func findPlaces(query:String,completionHandler: @escaping(Result<[SearchResultModel],Error>) -> Void) {
-        
-        let filter = GMSAutocompleteFilter()
-        
-        filter.type = .noFilter
-        filter.countries = ["IND"]
-        
-        GoogleMapManager.shared.findAutocompletePredictions(fromQuery: query, filter: filter, sessionToken: nil) { result, error in
-            
-            guard let result = result, error == nil else { return completionHandler(.failure(GooglePlacesSearchError.noResult))  }
-            
-            completionHandler(.success(result.compactMap{SearchResultModel(placeID: $0.placeID, placeName: $0.attributedFullText.string)}))
-        }
-    }
-    
-    
-    ///Get Coordinates from Place Name.
-    func fetchCoordinates( for place:SearchResultModel,completionHandler: @escaping(Result<CLLocationCoordinate2D,Error>)->Void ){
-        GoogleMapManager.shared.fetchPlace(fromPlaceID: place.placeID, placeFields: .coordinate, sessionToken: nil) { googlePlace, err in
-            guard err == nil else{
-                return completionHandler(.failure(GooglePlacesSearchError.noResult))
-            }
-            
-            guard let googlePlace = googlePlace else{
-                return completionHandler(.failure(GooglePlacesSearchError.noResult))
-            }
-            completionHandler(.success(googlePlace.coordinate))
-        }
-    }
-    
-    ///Gives Place Name from Coordinates. This is async function.
-    func getPlaceName(of coordinate:CLLocationCoordinate2D) async throws -> String?{
-        do{
-            let geocodeResponse = try await gms.reverseGeocodeCoordinate(coordinate)
-            return geocodeResponse.firstResult()?.lines?[0]
-        }
-        catch{
-            print("error occurrred")
-            return nil
-        }
-    }
+//class GoogleMapManager:GeocodingProtocol{
+//        
+//    let gms:GMSGeocoder
+//    init(gms:GMSGeocoder){
+//        self.gms = gms
+//    }
+//    
+//    ///Gives Place Name from Coordinates. This is async function.
+//    func getPlaceName(of coordinate:CLLocationCoordinate2D) async throws -> String?{
+//        do{
+//            let geocodeResponse = try await gms.reverseGeocodeCoordinate(coordinate)
+//            return geocodeResponse.firstResult()?.lines?[0]
+//        }
+//        catch{
+//            print("error occurrred")
+//            return nil
+//        }
+//    }
+//}
+
+
+enum GeoCodingError:Error{
+    case geoCodingFailed
 }
-
-
 class GeoCodingManager:GeocodingProtocol{
     
-    let gms:GMSGeocoder
-    init(gms:GMSGeocoder){
-        self.gms = gms
+    let geoCoder:GMSGeocoder
+    init(geoCoder:GMSGeocoder){
+        self.geoCoder = geoCoder
     }
     ///GET **PLACE ADDRESS **from **COORDINATES**
     func getPlaceName(of coordinate: CLLocationCoordinate2D) async throws -> String? {
         do{
-            let geocodeResponse = try await gms.reverseGeocodeCoordinate(coordinate)
+            let geocodeResponse = try await geoCoder.reverseGeocodeCoordinate(coordinate)
             return geocodeResponse.firstResult()?.lines?[0]
         }
         catch{
-            print("error occurrred")
-            return nil
+//            print("error occurrred")
+//            return nil
+            throw GeoCodingError.geoCodingFailed
         }
     }
     

@@ -2,8 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSAppTransportSecurity</key>
+	<dict/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>HTTPS</string>
+		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>HTTP</string>
+		</dict>
+	</array>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Give to Don&apos;t Use app</string>
+	<string>Give to Use app</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Give Location</string>
 </dict>

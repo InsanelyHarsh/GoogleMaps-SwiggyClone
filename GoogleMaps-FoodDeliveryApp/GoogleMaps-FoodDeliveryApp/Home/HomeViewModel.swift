@@ -10,7 +10,13 @@ import CoreLocation
 import GoogleMaps
 
 class HomeViewModel:ObservableObject{
-    let manager:GeoCodingManager = GeoCodingManager(gms: GMSGeocoder())
+    let manager:GeoCodingManager = GeoCodingManager(geoCoder: GMSGeocoder())
+    let locationManager:LocationManager
+    
+    init(locationManager:LocationManager){
+        self.locationManager = locationManager
+    }
+    
     
     @Published var locationStatus:String = ""
     
@@ -27,12 +33,7 @@ class HomeViewModel:ObservableObject{
     var longitude: CLLocationDegrees {
         return location?.coordinate.longitude ?? 0
     }
-    
-    let locationManager:LocationManager
-    init(locationManager:LocationManager){
-        self.locationManager = locationManager
-    }
-    
+
     func getLatestLocation(){
         
     }

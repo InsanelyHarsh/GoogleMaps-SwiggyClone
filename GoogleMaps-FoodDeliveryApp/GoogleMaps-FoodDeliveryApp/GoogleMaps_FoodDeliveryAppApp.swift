@@ -15,12 +15,38 @@ let APIKey = "AIzaSyAhR0HtGDcfzzU4aDLnAcncebqVZBt6oCs"
 struct GoogleMaps_FoodDeliveryAppApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject var locationManager:LocationManager = LocationManager()
     
+    @State var selection:Int = 0
+    
+    @StateObject var stateHandler:StateHandler = StateHandler() //Saves Map's config, used when map is re-renderd every time location(current) is changed
     var body: some Scene {
         WindowGroup {
-            HomeView()
-                .environmentObject(locationManager)
+            NavigationView{
+                TabView(selection: $selection) {
+                    HomeView()
+//                        .environmentObject(stateHandler)
+                        .tag(0)
+                        .tabItem {
+                            VStack{
+                                Image(systemName: selection == 0 ? "house.fill" : "house")
+                                    .foregroundColor(.orange)
+                                Text("User")
+                            }
+                        }
+                    
+                    DirectionsView()
+                        .environmentObject(stateHandler)
+                        .tag(1)
+                        .tabItem {
+                            VStack{
+                                Image(systemName: selection == 1 ? "location.fill" : "location")
+                                Text("Directions")
+                            }.tint(.orange)
+                        }
+                }
+                .environmentObject(stateHandler)
+                .navigationTitle(selection == 0 ? "Home" : "Directions")
+            }
         }
     }
 }

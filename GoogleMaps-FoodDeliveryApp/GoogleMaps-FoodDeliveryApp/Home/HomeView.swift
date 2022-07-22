@@ -5,15 +5,17 @@
 //  Created by Harsh Yadav on 26/05/22.
 //
 import SwiftUI
+import CoreLocation
 struct HomeView: View {
     
 //    @EnvironmentObject var vm:LocationManager
     @StateObject var vm = LocationManager()
+//    @StateObject var homeVM = HomeViewModel(locationManager: LocationManager())
     @Environment(\.openURL) var openURL
     @State var noPermission:Bool = true
     
     var body: some View {
-        NavigationView{
+//        NavigationView{
             VStack{
                 HStack{
                     NavigationLink {
@@ -123,8 +125,8 @@ struct HomeView: View {
                 Spacer()
             }
             
-            .navigationTitle("Foodie")
-        }
+//            .navigationTitle("Foodie")
+//        }
     }
     
     func ok(){

@@ -8,8 +8,11 @@
 import Foundation
 import CoreLocation
 import GoogleMaps
+
+
 class MapViewModel:ObservableObject{
-    let mapManager = GoogleMapManager(gms: GMSGeocoder())
+//    let mapManager = GoogleMapManager(gms: GMSGeocoder())
+    let geoCodingManager = GeoCodingManager(geoCoder: GMSGeocoder())
     @Published var placeName:String = ""
     init(){
         
@@ -18,7 +21,7 @@ class MapViewModel:ObservableObject{
     func getPlaceName(of coordinate:CLLocationCoordinate2D) async{
         print("VM is getting called")
         do{
-            let name = try await mapManager.getPlaceName(of: coordinate)
+            let name = try await geoCodingManager.getPlaceName(of: coordinate)
             guard let name = name else {
                 return
             }

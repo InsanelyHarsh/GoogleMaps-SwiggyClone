@@ -7,12 +7,16 @@
 
 import Foundation
 import CoreLocation
+
+
 class SearchViewModel:ObservableObject{
     
-    let manager:GoogleMapManager
+//    let manager:GoogleMapManager
+    
+    let manager:SearchManager
     let locationManager:LocationManager
     
-    init(manager:GoogleMapManager,locationManager:LocationManager){
+    init(manager:SearchManager,locationManager:LocationManager){
         self.manager = manager
         self.locationManager = locationManager
     }
@@ -22,8 +26,6 @@ class SearchViewModel:ObservableObject{
     @Published var coordinate:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 4.4, longitude: 6.6)
     
     func getData(){
-//        print("Calling for: \(query)")
-        
         manager.findPlaces(query: query) { [weak self] result in
             switch result{
                 

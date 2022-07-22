@@ -25,7 +25,7 @@ enum AccuracyStatus{
 class LocationManager:NSObject,ObservableObject{
 
     let manager = CLLocationManager()
-    let geoManager:GeoCodingManager = GeoCodingManager(gms: GMSGeocoder())
+    let geoManager:GeoCodingManager = GeoCodingManager(geoCoder: GMSGeocoder())
     
     @Published var locationDescription = "...."
     @Published var accuracyStatus:AccuracyStatus = .unknown
@@ -37,6 +37,9 @@ class LocationManager:NSObject,ObservableObject{
             Task{
                 do{
                     try await self.fetchUserLocation()
+                    await MainActor.run{
+                        self.current = location?.coordinate
+                    }
                 }
                 catch{
                     print("Errrrrr.")
@@ -45,6 +48,7 @@ class LocationManager:NSObject,ObservableObject{
         }
     }
     
+    @Published var current:CLLocationCoordinate2D?
     var latitude: CLLocationDegrees {
         return location?.coordinate.latitude ?? 0
     }
@@ -59,6 +63,7 @@ class LocationManager:NSObject,ObservableObject{
         setup()
         updateAuthStatus()
         updateAccuracyStatus()
+        startUpdating()
     }
     
     private func setup(){
@@ -68,8 +73,6 @@ class LocationManager:NSObject,ObservableObject{
         manager.requestWhenInUseAuthorization()
         
         //after requesting auth call delegate didUpdateLocations
-        
-//        manager.startUpdatingLocation()
     }
     
     private func updateAuthStatus(){
@@ -103,7 +106,9 @@ class LocationManager:NSObject,ObservableObject{
     }
     
     private func updateAccuracyStatus(){
-        manager.startUpdatingLocation()
+        
+        self.startUpdating()
+        
         switch manager.accuracyAuthorization{
         case .fullAccuracy:
             self.locationDescription = "Accurate Location"
@@ -123,7 +128,8 @@ class LocationManager:NSObject,ObservableObject{
     
     func updateLocation(){//TODO: improve... Refactor startUpdatingLocation()
         manager.requestLocation()
-        manager.startUpdatingLocation()
+        self.startUpdating()
+        
     }
     
 
@@ -141,6 +147,19 @@ class LocationManager:NSObject,ObservableObject{
             self.userLocation = result
         }
     }
+    
+    
+    func stopUpdating(){
+        manager.stopUpdatingLocation()
+    }
+    
+    func startUpdating(){
+        manager.startUpdatingLocation()
+    }
+    
+    deinit{
+        manager.stopUpdatingLocation()
+    }
 }
 
 
@@ -153,14 +172,16 @@ extension LocationManager:CLLocationManagerDelegate{
         self.location = location
         self.updateAuthStatus()
         self.updateAccuracyStatus()
+        print("kinna :: didUpdateLocations")
         manager.stopUpdatingLocation()
     }
+    
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         self.locationDescription = "An Error Occured While Updating User Location" //TODO: improve..
         
         print(">> An Error Occured While Updating User Location. \n")
         print(">> Error: \(error.localizedDescription) \n \n")
-        
     }
     
     //DID CHANGE AUTH status
@@ -191,7 +212,7 @@ extension LocationManager:CLLocationManagerDelegate{
                         
                     }
                     
-                    manager.startUpdatingLocation()
+                self.startUpdating()
 //                }
 //                catch{
 //                    locationDescription = "An Error Occured While Requesting Temporaray Full Accuracy Auth"
@@ -200,7 +221,7 @@ extension LocationManager:CLLocationManagerDelegate{
             else if(accuracyStatus == .fullAccuracy){
                 
                 self.locationDescription = "Accurate Location"
-                manager.startUpdatingLocation()
+                self.startUpdating()
             }
         }
     }

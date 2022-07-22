@@ -8,12 +8,18 @@
 import GoogleMaps
 import UIKit
 import SwiftUI
+import GoogleMapsCore
+import GooglePlaces
+
 
 //MARK: UIKIT
 struct GoogleMapsView: UIViewRepresentable {
     
+    
     private let zoom: Float = 20
     @Binding var coordinate:CLLocationCoordinate2D
+//    @Binding var cameraPosition:GMSCameraPosition
+    var cameraPosition:GMSCameraPosition?
     let customMarker:UIImageView = {
         let img = UIImageView(frame: .zero)
         img.image = UIImage(systemName: "circle.circle.fill")
@@ -30,6 +36,7 @@ struct GoogleMapsView: UIViewRepresentable {
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapView.mapType = .normal
         
+        
         layout(mapView:mapView) //custom marker
         
         mapView.delegate = context.coordinator
@@ -42,7 +49,7 @@ struct GoogleMapsView: UIViewRepresentable {
         //UPDATING UIKIT FROM CHANGING SWIFTUI
     func updateUIView(_ mapView: GMSMapView, context: Context) {
         
-        let upd = GMSCameraUpdate.setCamera(GMSCameraPosition(target: coordinate, zoom: 15))
+        let upd = GMSCameraUpdate.setCamera(GMSCameraPosition(target: coordinate, zoom: 10))
         mapView.animate(with: upd)
     }
     
@@ -54,24 +61,28 @@ struct GoogleMapsView: UIViewRepresentable {
         return Coordinator(centerCoodinates: $coordinate)
     }
     
-    
-    
     class Coordinator:NSObject,GMSMapViewDelegate{
     
         @Binding var centerCoodinates:CLLocationCoordinate2D
-
+//        var cameraPosition:((GMSCameraPosition)->Void)?
+        
         var position:GMSCameraPosition?{
             didSet{
                 print("Position Changed")
             }
         }
+        
+        
         init(centerCoodinates:Binding<CLLocationCoordinate2D>){
             self._centerCoodinates = centerCoodinates
+//            self.cameraPosition = cameraPosition
+            
         }
         
         func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
           
             print("MapView didChangeCameraPosition " + "\(position.target.longitude),\(position.target.latitude) " + "zoom: \(position.zoom) bearing: \(position.bearing)")
+            
             
             self.position = position
          }
@@ -81,12 +92,12 @@ struct GoogleMapsView: UIViewRepresentable {
             guard let position = position else {
                 return
             }
-            
+           
             mapView.animate(toLocation: position.target)
             self.centerCoodinates = position.target
             
+//            self.cameraPosition!(position)
         }
-        
     }
 
     
@@ -98,10 +109,11 @@ struct GoogleMapsView: UIViewRepresentable {
             customMarker.centerYAnchor.constraint(equalTo: mapView.centerYAnchor)
         ])
     }
+    
+    private func lines(mapView:GMSMapView){
+//        mapView.
+    }
 }
-
-
-
 
 
 
@@ -148,7 +160,5 @@ class GoogleMapViewController:UIViewController{
     private func update(){
             //        let update = GMSCameraUpdate.setCamera(GMSCameraPosition(latitude: 51.5072, longitude: 0.1276, zoom: 6))
             //        mapView.animate(toLocation: CLLocationCoordinate2D(latitude: <#T##CLLocationDegrees#>, longitude: <#T##CLLocationDegrees#>))
-        
-        
     }
 }
