@@ -26,6 +26,7 @@
 		B04F6A392887E74400B74989 /* DirectionMapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A382887E74400B74989 /* DirectionMapViewModel.swift */; };
 		B04F6A572889523200B74989 /* DirectionLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A562889523200B74989 /* DirectionLocationManager.swift */; };
 		B04F6A5B288A84AA00B74989 /* StateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A5A288A84AA00B74989 /* StateHandler.swift */; };
+		B04F6A60288AC4E600B74989 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04F6A5F288AC4E600B74989 /* InfoView.swift */; };
 		B05B5C3728447F1D005B1AB7 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05B5C3628447F1D005B1AB7 /* HomeViewModel.swift */; };
 		B0D6EA32284099B2002D10CE /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D6EA31284099B2002D10CE /* HomeView.swift */; };
 		B0D6EA35284099CD002D10CE /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D6EA34284099CD002D10CE /* SearchView.swift */; };
@@ -62,6 +63,7 @@
 		B04F6A382887E74400B74989 /* DirectionMapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionMapViewModel.swift; sourceTree = "<group>"; };
 		B04F6A562889523200B74989 /* DirectionLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionLocationManager.swift; sourceTree = "<group>"; };
 		B04F6A5A288A84AA00B74989 /* StateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateHandler.swift; sourceTree = "<group>"; };
+		B04F6A5F288AC4E600B74989 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		B05B5C3628447F1D005B1AB7 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		B0D6EA31284099B2002D10CE /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B0D6EA34284099CD002D10CE /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				B036C41728853E6E0034A7EA /* Directions */,
 				B04F6A302887B9BF00B74989 /* DirectionSearch */,
 				B04F6A332887C74B00B74989 /* DirectionMap */,
+				B04F6A5C288AC4CD00B74989 /* Info */,
 				B04F6A292887B46800B74989 /* ReusableViews */,
 				B036C40A2885205D0034A7EA /* Statics */,
 				B0D6EA4928409A95002D10CE /* CustomCell */,
@@ -197,6 +200,14 @@
 				B04F6A5A288A84AA00B74989 /* StateHandler.swift */,
 			);
 			path = DirectionMap;
+			sourceTree = "<group>";
+		};
+		B04F6A5C288AC4CD00B74989 /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				B04F6A5F288AC4E600B74989 /* InfoView.swift */,
+			);
+			path = Info;
 			sourceTree = "<group>";
 		};
 		B0D6EA30284099AA002D10CE /* Home */ = {
@@ -382,6 +393,7 @@
 				B04F6A2F2887B87A00B74989 /* DirectionSearchView.swift in Sources */,
 				B04F6A2D2887B48600B74989 /* CustomTextField.swift in Sources */,
 				B036C410288526330034A7EA /* DirectionManager.swift in Sources */,
+				B04F6A60288AC4E600B74989 /* InfoView.swift in Sources */,
 				B036C414288528D60034A7EA /* MapDirectionViewModel.swift in Sources */,
 				B036C40C288520660034A7EA /* Statics.swift in Sources */,
 				B04F6A392887E74400B74989 /* DirectionMapViewModel.swift in Sources */,

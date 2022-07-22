@@ -62,7 +62,7 @@ struct DirectionSearchView: View {
             }
             .listStyle(.inset)
             .navigationTitle("Search")
-            .navigationViewStyle(.columns)
+            .navigationBarTitleDisplayMode(.inline)
         }
         .onChange(of: directionSearchVM.isloading, perform: { newValue in
             if !newValue{

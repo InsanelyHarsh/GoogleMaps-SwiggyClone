@@ -21,32 +21,38 @@ struct GoogleMaps_FoodDeliveryAppApp: App {
     @StateObject var stateHandler:StateHandler = StateHandler() //Saves Map's config, used when map is re-renderd every time location(current) is changed
     var body: some Scene {
         WindowGroup {
-            NavigationView{
-                TabView(selection: $selection) {
+            TabView(selection: $selection) {
+                NavigationView{
                     HomeView()
-//                        .environmentObject(stateHandler)
-                        .tag(0)
-                        .tabItem {
-                            VStack{
-                                Image(systemName: selection == 0 ? "house.fill" : "house")
-                                    .foregroundColor(.orange)
-                                Text("User")
-                            }
-                        }
-                    
+                        .navigationTitle("Home")
+                }
+                .tag(0)
+                .tabItem {
+                    VStack{
+                        Image(systemName: selection == 0 ? "house.fill" : "house")
+                            .foregroundColor(.orange)
+                        Text("User")
+                    }
+                }
+                
+                NavigationView{
                     DirectionsView()
                         .environmentObject(stateHandler)
-                        .tag(1)
-                        .tabItem {
-                            VStack{
-                                Image(systemName: selection == 1 ? "location.fill" : "location")
-                                Text("Directions")
-                            }.tint(.orange)
-                        }
+                        .navigationTitle("Directions")
+//                        .navigationBarTitleDisplayMode(.inline)
                 }
-                .environmentObject(stateHandler)
-                .navigationTitle(selection == 0 ? "Home" : "Directions")
+                
+                .tag(1)
+                .tabItem {
+                    VStack{
+                        Image(systemName: selection == 1 ? "location.fill" : "location")
+                        Text("Directions")
+                    }.tint(.orange)
+                }
+                
+                
             }
+//                .environmentObject(stateHandler)
         }
     }
 }

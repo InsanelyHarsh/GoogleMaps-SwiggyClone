@@ -27,6 +27,17 @@ struct DirectionMapViewController: UIViewRepresentable {
     
     var mapView:GMSMapView!
     
+    var icon:((String,UIColor)->(UIImageView)) = { x,y in
+        let icon = UIImageView(image: UIImage(systemName: x)?.withTintColor(.orange))
+        icon.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            icon.widthAnchor.constraint(equalToConstant: 30),
+            icon.heightAnchor.constraint(equalToConstant: 30)
+        ])
+        icon.tintColor = y
+        
+        return icon
+    }
     
     func makeUIView(context: Self.Context) -> GMSMapView {
         
@@ -45,14 +56,14 @@ struct DirectionMapViewController: UIViewRepresentable {
         
         let pick = GMSMarker(position: stateHandler.userPickupLocation!)
         pick.title = "Pickup Location"
-        pick.icon = UIImage(systemName: "airplane.departure")
-        pick.icon?.withTintColor(.orange)
+
+        pick.iconView = self.icon("figure.walk", .systemPink)
         
         
         let drop = GMSMarker(position: stateHandler.userDropLocation!)
         drop.title = "Drop Location"
-        drop.icon = UIImage(systemName: "airplane.arrival")
-        drop.icon?.withTintColor(.orange)
+        
+        drop.iconView = self.icon("mappin", .blue)
         
         pick.map = mapView
         drop.map = mapView

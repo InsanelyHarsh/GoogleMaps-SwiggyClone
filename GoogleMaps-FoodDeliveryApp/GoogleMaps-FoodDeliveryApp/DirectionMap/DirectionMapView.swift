@@ -18,6 +18,7 @@ struct DirectionMapView: View {
     
     @EnvironmentObject var stateHandler:StateHandler
     
+    @State var instructions:[String] = []
     @State var newCoorinates:CLLocationCoordinate2D?{
         willSet{
             
@@ -31,8 +32,7 @@ struct DirectionMapView: View {
             DirectionMapViewController()
                 .environmentObject(directionMapVM)
                 .environmentObject(stateHandler)
-                .navigationTitle("Map")
-                .navigationViewStyle(.stack)
+//                .navigationTitle("Map")
             
             
             HStack{
@@ -41,20 +41,30 @@ struct DirectionMapView: View {
                     
                     Text("Distance: \(directionMapVM.mapDirectionModel?.routes?[0].legs?[0].distance?.text ?? "-")")
                     
-                    Text("Arrival Time: \(directionMapVM.mapDirectionModel?.routes?[0].legs?[0].arrivalTime?.text ?? "-")")
-                    
-                    Text("Departure Time: \(directionMapVM.mapDirectionModel?.routes?[0].legs?[0].departureTime?.text ?? "-")")
+//                    Text("Arrival Time: \(directionMapVM.mapDirectionModel?.routes?[0].legs?[0].arrivalTime?.text ?? "-")")
+//
+//                    Text("Departure Time: \(directionMapVM.mapDirectionModel?.routes?[0].legs?[0].departureTime?.text ?? "-")")
 
                 }
                 .padding(.leading)
                 .foregroundColor(.white)
-                .padding(.bottom)
+                .padding(.bottom,15)
                 Spacer()
             }
-            .background{Color.black.cornerRadius(10).opacity(0.4)}
+            .background{Color.black.blur(radius: 5, opaque: true).opacity(0.6)}
             .padding(.top)
             .cornerRadius(10)
         }
+        .toolbar(content: {
+            NavigationLink(destination: {
+                InfoView(instructions: [])
+            }) {
+                Image(systemName: "info.circle")
+            }
+
+        })
+        .navigationTitle("Map")
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             self.stateHandler.makeApiCall = {
                 await directionMapVM.getDirections(source: stateHandler.userPickupLocation!, destination: stateHandler.userDropLocation!)
